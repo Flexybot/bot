@@ -1,4 +1,4 @@
-import { createClient } from '@supabase/supabase-js';
+import { createBrowserClient } from '@supabase/ssr';
 import { Database } from '@/types/supabase';
 
 // Validate environment variables
@@ -10,14 +10,7 @@ if (!supabaseUrl || !supabaseAnonKey) {
 }
 
 // Create client-side Supabase client
-export const supabase = createClient<Database>(
+export const supabase = createBrowserClient<Database>(
   supabaseUrl,
-  supabaseAnonKey,
-  {
-    auth: {
-      persistSession: true,
-      autoRefreshToken: true,
-      detectSessionInUrl: true
-    },
-  }
+  supabaseAnonKey
 );

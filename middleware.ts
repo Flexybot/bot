@@ -52,15 +52,17 @@ export async function middleware(request: NextRequest) {
     supabaseAnonKey,
     {
       cookies: {
-        get: (name) => request.cookies.get(name)?.value,
-        set: (name, value, options) => {
+        get(name) {
+          return request.cookies.get(name)?.value;
+        },
+        set(name, value, options) {
           res.cookies.set({
             name,
             value,
             ...options,
           });
         },
-        remove: (name, options) => {
+        remove(name, options) {
           res.cookies.set({
             name,
             value: '',
