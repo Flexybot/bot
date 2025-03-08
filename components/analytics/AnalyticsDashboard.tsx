@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from 'react';
 import { useAnalytics } from '@/hooks/useAnalytics';
 import { AnalyticsDateRange } from '@/lib/analytics/client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';

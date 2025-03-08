@@ -4,9 +4,16 @@ import { headers } from 'next/headers';
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
 
+// Get API key from environment variable
+const apiKey = process.env.OPENAI_API_KEY;
+
+if (!apiKey) {
+  throw new Error('Missing OPENAI_API_KEY environment variable');
+}
+
 // Create OpenAI client
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey,
 });
 
 export async function POST(req: Request) {

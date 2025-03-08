@@ -56,7 +56,7 @@ const development: Config = {
   env: 'development',
   logLevel: 'debug',
   ai: {
-    model: 'gpt-3.5-turbo', // Use cheaper model in dev
+    model: 'gpt-3.5-turbo',
     temperature: 0.7,
     maxTokens: 2000,
     provider: 'openai',
@@ -73,9 +73,9 @@ const development: Config = {
   },
   features: {
     debug: true,
-    analytics: false, // Disable analytics in dev
+    analytics: false,
     feedback: true,
-    experimental: true, // Enable experimental features
+    experimental: true,
   },
   services: {
     supabase: {
@@ -99,9 +99,9 @@ const production: Config = {
     buildDate: process.env.NEXT_PUBLIC_BUILD_DATE,
   },
   env: 'production',
-  logLevel: 'error', // Log only errors in production
+  logLevel: 'error',
   ai: {
-    model: 'gpt-4', // Use better model in production
+    model: 'gpt-4',
     temperature: 0.7,
     maxTokens: 4000,
     provider: 'openai',
@@ -118,9 +118,9 @@ const production: Config = {
   },
   features: {
     debug: false,
-    analytics: true, // Enable analytics in production
+    analytics: true,
     feedback: true,
-    experimental: false, // Disable experimental features
+    experimental: false,
   },
   services: {
     supabase: {
@@ -208,16 +208,16 @@ export const featureFlags = {
 
 // Constants derived from config
 export const constants = {
-  MAX_UPLOAD_SIZE: config.upload.maxSizeMb * 1024 * 1024, // Convert to bytes
+  MAX_UPLOAD_SIZE: config.upload.maxSizeMb * 1024 * 1024,
   ALLOWED_FILE_TYPES: config.upload.allowedTypes,
   DEFAULT_AI_MODEL: config.ai.model,
   DEFAULT_TEMPERATURE: config.ai.temperature,
   MAX_TOKENS: config.ai.maxTokens,
-  API_TIMEOUT: config.env === 'production' ? 30000 : 60000, // 30s prod, 60s dev
-  CACHE_TTL: config.env === 'production' ? 3600 : 0, // 1 hour in prod, no cache in dev
+  API_TIMEOUT: config.env === 'production' ? 30000 : 60000,
+  CACHE_TTL: config.env === 'production' ? 3600 : 0,
   RATE_LIMIT: {
-    window: 60 * 1000, // 1 minute
-    max: config.env === 'production' ? 100 : 1000, // Requests per window
+    window: 60 * 1000,
+    max: config.env === 'production' ? 100 : 1000,
   },
 };
 

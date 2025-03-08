@@ -2,16 +2,26 @@ import { createClient } from '@supabase/supabase-js';
 import OpenAI from 'openai';
 import { VectorSearchFilter } from '@supabase/supabase-js';
 
+// Get environment variables
+const apiKey = process.env.OPENAI_API_KEY;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+if (!apiKey) {
+  throw new Error('Missing OPENAI_API_KEY environment variable');
+}
+
+if (!supabaseUrl || !supabaseServiceKey) {
+  throw new Error('Missing Supabase environment variables');
+}
+
 // Initialize OpenAI client
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY!,
+  apiKey,
 });
 
 // Initialize Supabase admin client
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
 interface Document {
   id: string;

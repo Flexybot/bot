@@ -1,9 +1,16 @@
 import { Configuration, OpenAIApi } from 'openai';
 
+// Get API key from environment variable
+const apiKey = process.env.OPENAI_API_KEY;
+
+if (!apiKey) {
+  throw new Error('Missing OPENAI_API_KEY environment variable');
+}
+
 export class OpenAIEmbeddings {
   private openai: OpenAIApi;
 
-  constructor(apiKey: string) {
+  constructor() {
     const configuration = new Configuration({ apiKey });
     this.openai = new OpenAIApi(configuration);
   }
