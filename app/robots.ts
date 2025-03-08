@@ -12,7 +12,6 @@ export default function robots(): MetadataRoute.Robots {
           '/features',
           '/pricing',
           '/docs',
-          '/blog',
           '/contact',
           '/auth/login',
           '/auth/signup',

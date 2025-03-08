@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { ThemeProvider } from 'next-themes';
+import { Route } from 'next';
 
 export default function MarketingLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -18,17 +19,14 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
                 <span className="text-lg font-semibold">FlexyBot</span>
               </Link>
               <nav className="hidden md:flex gap-6 ml-8">
-                <Link href="/features" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
+                <Link href={"/features" as Route} className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
                   Features
                 </Link>
                 <Link href="/#pricing" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
                   Pricing
                 </Link>
-                <Link href="/docs" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
+                <Link href={"/docs" as Route} className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
                   Documentation
-                </Link>
-                <Link href="/blog" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
-                  Blog
                 </Link>
               </nav>
             </div>

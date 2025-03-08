@@ -1,8 +1,10 @@
 "use client";
 
 import { motion } from 'framer-motion';
-import { Bot, Brain, Zap, Lock, Globe, BarChart } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Bot, Brain, Zap, Lock, Globe, BarChart } from 'lucide-react';
+import Link from 'next/link';
 
 const features = [
   {
@@ -78,6 +80,21 @@ export default function FeaturesPage() {
           </motion.div>
         ))}
       </div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.8 }}
+        className="text-center mt-16 space-y-6"
+      >
+        <h2 className="text-3xl font-bold">Ready to get started?</h2>
+        <p className="text-xl text-muted-foreground">
+          Create your first AI chatbot in minutes. No credit card required.
+        </p>
+        <Button asChild size="lg">
+          <Link href="/signup">Start Building for Free</Link>
+        </Button>
+      </motion.div>
     </div>
   );
 }

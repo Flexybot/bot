@@ -9,7 +9,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${baseUrl}/features`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
     { url: `${baseUrl}/pricing`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
     { url: `${baseUrl}/docs`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
-    { url: `${baseUrl}/blog`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.7 },
     { url: `${baseUrl}/contact`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.6 },
     { url: `${baseUrl}/auth/login`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.5 },
     { url: `${baseUrl}/auth/signup`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.5 },
@@ -33,36 +32,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${baseUrl}/docs/api/analytics`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
   ];
   
-  // Blog posts (would be dynamically generated in a real app)
-  const blogPosts = [
-    { 
-      url: `${baseUrl}/blog/getting-started-with-rag`, 
-      lastModified: new Date('2024-03-01'), 
-      changeFrequency: 'yearly', 
-      priority: 0.6 
-    },
-    { 
-      url: `${baseUrl}/blog/chatbot-best-practices`, 
-      lastModified: new Date('2024-03-05'), 
-      changeFrequency: 'yearly', 
-      priority: 0.6 
-    },
-    { 
-      url: `${baseUrl}/blog/website-integration-guide`, 
-      lastModified: new Date('2024-03-10'), 
-      changeFrequency: 'yearly', 
-      priority: 0.6 
-    },
-    { 
-      url: `${baseUrl}/blog/prompt-engineering-tips`, 
-      lastModified: new Date('2024-03-15'), 
-      changeFrequency: 'yearly', 
-      priority: 0.6 
-    },
-  ];
-  
   // Combine all URLs and ensure they're unique
-  const allUrls = [...staticPages, ...documentationPages, ...blogPosts];
+  const allUrls = [...staticPages, ...documentationPages];
   const uniqueUrls = Array.from(new Set(allUrls.map(item => item.url))).map(url => {
     return allUrls.find(item => item.url === url)!;
   });
