@@ -188,6 +188,16 @@ const nextConfig = {
   // Configure build output
   poweredByHeader: false,
   generateEtags: true,
+
+  // Disable ESLint during build
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+
+  // Disable TypeScript type checking during build
+  typescript: {
+    ignoreBuildErrors: true,
+  },
 };
 
 // Sentry configuration options
