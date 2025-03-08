@@ -1,18 +1,36 @@
 import Stripe from 'stripe';
 
-if (!process.env.STRIPE_SECRET_KEY) {
-  throw new Error('Missing STRIPE_SECRET_KEY environment variable');
-}
+// Only throw during actual runtime, not build time
+const getStripeClient = () => {
+  if (!process.env.STRIPE_SECRET_KEY) {
+    throw new Error('Stripe API key not configured');
+  }
+  return new Stripe(process.env.STRIPE_SECRET_KEY, {
+    apiVersion: '2023-10-16',
+    typescript: true,
+  });
+};
 
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: '2023-10-16',
-  typescript: true,
+// Initialize stripe client lazily
+let stripeClient: Stripe | null = null;
+
+export const stripe = new Proxy({} as Stripe, {
+  get: (target, prop) => {
+    if (!stripeClient) {
+      stripeClient = getStripeClient();
+    }
+    return stripeClient[prop as keyof Stripe];
+  },
 });
 
 export async function createOrRetrieveCustomer(email: string, organizationId: string) {
   try {
+    if (!stripeClient) {
+      stripeClient = getStripeClient();
+    }
+
     // First, try to find an existing customer
-    const { data: customers } = await stripe.customers.search({
+    const { data: customers } = await stripeClient.customers.search({
       query: `email:'${email}' AND metadata['organization_id']:'${organizationId}'`,
     });
 
@@ -21,7 +39,7 @@ export async function createOrRetrieveCustomer(email: string, organizationId: st
     }
 
     // If no customer exists, create a new one
-    const customer = await stripe.customers.create({
+    const customer = await stripeClient.customers.create({
       email,
       metadata: {
         organization_id: organizationId,
@@ -51,7 +69,11 @@ export async function createCheckoutSession({
   cancelUrl: string;
 }) {
   try {
-    const session = await stripe.checkout.sessions.create({
+    if (!stripeClient) {
+      stripeClient = getStripeClient();
+    }
+
+    const session = await stripeClient.checkout.sessions.create({
       customer: customerId,
       mode,
       payment_method_types: ['card'],
@@ -90,7 +112,11 @@ export async function createBillingPortalSession({
   returnUrl: string;
 }) {
   try {
-    const session = await stripe.billingPortal.sessions.create({
+    if (!stripeClient) {
+      stripeClient = getStripeClient();
+    }
+
+    const session = await stripeClient.billingPortal.sessions.create({
       customer: customerId,
       return_url: returnUrl,
     });
