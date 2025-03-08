@@ -1,9 +1,26 @@
 import { headers } from 'next/headers';
 import { NextResponse } from 'next/server';
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
+import { createClient } from '@supabase/supabase-js';
 import { cookies } from 'next/headers';
 import { stripe } from '@/lib/stripe/server';
 import Stripe from 'stripe';
+
+// Validate environment variables
+if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+  throw new Error('Missing required Supabase environment variables');
+}
+
+// Create admin client for webhook operations
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_ROLE_KEY,
+  {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false
+    }
+  }
+);
 
 export async function POST(req: Request) {
   const body = await req.text();
@@ -22,8 +39,6 @@ export async function POST(req: Request) {
       signature,
       process.env.STRIPE_WEBHOOK_SECRET
     );
-
-    const supabase = createRouteHandlerClient({ cookies });
 
     switch (event.type) {
       case 'customer.subscription.created':

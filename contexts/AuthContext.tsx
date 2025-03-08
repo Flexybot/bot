@@ -23,6 +23,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
+  // Validate environment variables
+  if (
+    typeof window !== 'undefined' && 
+    (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
+  ) {
+    throw new Error('Missing required Supabase environment variables');
+  }
+
   // Create Supabase client
   const supabase = createBrowserClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
