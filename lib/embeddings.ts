@@ -3,7 +3,8 @@ import { Configuration, OpenAIApi } from 'openai';
 // Get API key from environment variable
 const apiKey = process.env.OPENAI_API_KEY;
 
-if (!apiKey) {
+// Only throw error in production runtime, not during build
+if (!apiKey && process.env.NODE_ENV === 'production' && !process.env.VERCEL_ENV) {
   throw new Error('Missing OPENAI_API_KEY environment variable');
 }
 
@@ -11,7 +12,7 @@ export class OpenAIEmbeddings {
   private openai: OpenAIApi;
 
   constructor() {
-    const configuration = new Configuration({ apiKey });
+    const configuration = new Configuration({ apiKey: apiKey || 'dummy-key-for-build' });
     this.openai = new OpenAIApi(configuration);
   }
 
@@ -19,6 +20,10 @@ export class OpenAIEmbeddings {
    * Generate embeddings for a query string
    */
   async embedQuery(text: string): Promise<number[]> {
+    if (!apiKey) {
+      throw new Error('OpenAI API key not configured');
+    }
+
     try {
       const response = await this.openai.createEmbedding({
         model: 'text-embedding-ada-002',
@@ -36,6 +41,10 @@ export class OpenAIEmbeddings {
    * Generate embeddings for document text
    */
   async embedText(text: string): Promise<number[]> {
+    if (!apiKey) {
+      throw new Error('OpenAI API key not configured');
+    }
+
     try {
       const response = await this.openai.createEmbedding({
         model: 'text-embedding-ada-002',

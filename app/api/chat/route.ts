@@ -7,14 +7,13 @@ import { cookies } from 'next/headers';
 // Get API key from environment variable
 const apiKey = process.env.OPENAI_API_KEY;
 
-if (!apiKey) {
-  throw new Error('Missing OPENAI_API_KEY environment variable');
-}
-
-// Create OpenAI client
-const openai = new OpenAI({
-  apiKey,
-});
+// Create OpenAI client with runtime check
+const getOpenAIClient = () => {
+  if (!apiKey) {
+    throw new Error('OpenAI API key not configured');
+  }
+  return new OpenAI({ apiKey });
+};
 
 export async function POST(req: Request) {
   try {
@@ -25,6 +24,17 @@ export async function POST(req: Request) {
     if (!messages || !Array.isArray(messages)) {
       return new Response('Invalid request body', { status: 400 });
     }
+
+    // Check for API key at runtime
+    if (!apiKey) {
+      return new Response(
+        JSON.stringify({ error: 'OpenAI API key not configured' }),
+        { status: 500, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // Create OpenAI client
+    const openai = getOpenAIClient();
 
     // Prepare messages array with system prompt
     const apiMessages = [
